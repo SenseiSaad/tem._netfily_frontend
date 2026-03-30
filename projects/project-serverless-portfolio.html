@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serverless Portfolio | Slancer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #0f0f0f; color: #D4D4D4; }
+
+        /* Highlight key text in dark red with subtle background */
+        .highlight-text {
+            color: #ff4d4d;
+            background-color: rgba(255, 77, 77, 0.1);
+            padding: 0 0.25rem;
+            border-radius: 3px;
+        }
+
+        .content-paragraph {
+            margin-bottom: 1rem;
+            line-height: 1.7;
+        }
+
+        .bullet-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .image-placeholder {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            background-color: #1f1f1f;
+            border: 2px dashed #444;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #888;
+            font-family: monospace;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+
+        .section-title {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: #ff4d4d;
+            color: white;
+            font-weight: bold;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-right: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary:hover {
+            background-color: #e03b3b;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen relative">
+    <nav class="fixed top-0 w-full z-50 border-b border-white/10 bg-[#0f0f0f]/90 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="text-white hover:text-primary transition-colors flex items-center gap-2 text-sm font-mono group">
+                <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> Back to Portfolio
+            </a>
+            <div class="text-xl font-bold tracking-widest text-white border border-white/20 px-3 py-1 font-mono">SLANCER</div>
+        </div>
+    </nav>
+
+    <div class="relative z-10 pt-16">
+        <!-- Hero Section -->
+        <div id="hero-section" class="relative w-full h-[40vh] min-h-[300px] mb-12 flex items-center justify-center overflow-hidden border-b border-white/10" style="background-color:#9a3412;">
+            <div class="absolute inset-0 hero-overlay pointer-events-none"></div>
+            <div class="relative z-10 max-w-7xl mx-auto px-6 w-full pt-8 text-center">
+                <span class="inline-block px-3 py-1 rounded bg-white/10 border border-white/20 text-white text-xs font-mono mb-6 tracking-widest backdrop-blur-md">AWS S3 & CloudFront</span>
+                <h1 class="text-4xl md:text-6xl font-bold tracking-tight leading-tight drop-shadow-2xl">
+                    Serverless Portfolio
+                </h1>
+                <div class="mt-6 flex justify-center gap-4">
+                    <a href="https://github.com/yourusername/serverless-portfolio" target="_blank" class="btn-primary">GitHub Repo</a>
+                    <a href="#" target="_blank" class="btn-primary">Live Site</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="max-w-4xl mx-auto px-6 pb-24">
+            <!-- Project Overview -->
+            <div class="prose prose-invert prose-lg max-w-none text-gray-300">
+                <h3 class="text-2xl font-bold text-white mb-4">Project Overview</h3>
+                <p class="content-paragraph">
+                    Developed a <span class="highlight-text">serverless portfolio website</span> hosted on <span class="highlight-text">AWS S3</span>, accelerated with <span class="highlight-text">CloudFront</span>, automated via <span class="highlight-text">GitHub Actions CI/CD</span>, and integrated with <span class="highlight-text">Route 53</span> for domain management. This project demonstrates my ability to handle <span class="highlight-text">real-world cloud deployments</span>, automation, and troubleshooting.
+                </p>
+
+                <h4 class="section-title text-xl font-bold text-white">Website Preparation & Local Testing</h4>
+                <p class="content-paragraph">
+                    First, I developed and finalized the website locally, ensuring responsiveness and cross-browser compatibility. Once the code was ready, I prepared the build folder for deployment.
+                </p>
+                <div class="image-placeholder">[Add screenshot of local website preview]</div>
+
+                <h4 class="section-title text-xl font-bold text-white">AWS S3 Upload & Configuration</h4>
+                <p class="content-paragraph">
+                    I created an <span class="highlight-text">S3 bucket</span> and uploaded the full website folder. Configured public access, bucket policies, and optional IAM policies to ensure proper access control.
+                </p>
+                <div class="image-placeholder">[Add screenshot of S3 bucket & upload]</div>
+
+                <h4 class="section-title text-xl font-bold text-white">CloudFront Distribution</h4>
+                <p class="content-paragraph">
+                    Configured a <span class="highlight-text">CloudFront distribution</span> to serve content globally with low latency. Faced challenges like slow propagation and accidentally activating <span class="highlight-text">ACM billing</span> ($5/month), which was later resolved with AWS support. Learned the importance of double-checking configurations before enabling services.
+                </p>
+                <div class="image-placeholder">[Add screenshot of CloudFront dashboard]</div>
+
+                <h4 class="section-title text-xl font-bold text-white">Route 53 Domain Setup</h4>
+                <p class="content-paragraph">
+                    Connected the domain to CloudFront via <span class="highlight-text">Route 53</span>. Configured DNS records, handled propagation delays, and verified global availability.
+                </p>
+                <div class="image-placeholder">[Add screenshot of Route 53 settings]</div>
+
+                <h4 class="section-title text-xl font-bold text-white">CI/CD Automation</h4>
+                <p class="content-paragraph">
+                    Implemented <span class="highlight-text">GitHub Actions</span> to automate deployments. Using three simple commands, any update in the repository triggers a pipeline that uploads the new build to S3 and refreshes CloudFront.
+                </p>
+                <div class="image-placeholder">[Add screenshot of GitHub Actions workflow]</div>
+
+                <h4 class="section-title text-xl font-bold text-white">Challenges & Lessons Learned</h4>
+                <ul class="bullet-section list-disc pl-6 text-gray-400 mb-6">
+                    <li>DNS propagation delays caused temporary unavailability worldwide.</li>
+                    <li>Accidental activation of <span class="highlight-text">ACM certificate billing</span> — resolved by contacting AWS support.</li>
+                    <li>Learned the importance of careful IAM policy configuration to avoid unnecessary exposure.</li>
+                    <li>Gained experience with full serverless deployment workflow and automation pipelines.</li>
+                </ul>
+
+                <h4 class="section-title text-xl font-bold text-white">Project Highlights & Skills Gained</h4>
+                <ul class="bullet-section list-disc pl-6 text-gray-400 mb-6">
+                    <li>Full serverless static site deployment using <span class="highlight-text">AWS S3</span> and <span class="highlight-text">CloudFront</span>.</li>
+                    <li>Domain management with <span class="highlight-text">Route 53</span>.</li>
+                    <li>Automated CI/CD deployment using <span class="highlight-text">GitHub Actions</span>.</li>
+                    <li>Hands-on experience with IAM policies, privacy settings, and troubleshooting AWS services.</li>
+                    <li>Understanding of global content delivery, caching, and web optimization techniques.</li>
+                </ul>
+            </div>
+
+            <div class="mt-8">
+                <a href="experience-unity.html" class="text-white underline">Previous: Unity 2D Game Developer</a>
+                <span class="mx-2 text-gray-500">|</span>
+                <a href="project-ec2-static-host.html" class="text-white underline">Next: EC2 Static Host</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,33 @@
+// Global API Configuration
+// IMPORTANT STEP: Once you deploy to Render, replace this with your actual Render URL!
+// e.g. const API_BASE_URL = 'https://portfolio-backend-1234.onrender.com';
+const API_BASE_URL = 'http://127.0.0.1:8000'; 
+
+document.addEventListener('DOMContentLoaded', () => {
+    const desktopAdminLink = document.getElementById('desktop-admin-login');
+    const mobileAdminLink = document.getElementById('mobile-admin-login');
+    
+    // Direct link to the secure Django Admin
+    const adminUrl = `${API_BASE_URL}/admin/`; 
+    
+    if (desktopAdminLink) {
+        desktopAdminLink.href = adminUrl;
+        desktopAdminLink.target = "_blank"; // Keeps your portfolio open 
+    }
+    
+    if (mobileAdminLink) {
+        mobileAdminLink.href = adminUrl;
+        mobileAdminLink.target = "_blank";
+    }
+});
+
+// Example fetch call for your projects 
+async function fetchProjects() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/projects/`); // Adjust path if needed 
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Connection failed:", error);
+    }
+}

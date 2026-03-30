@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Saad Waseem - Cloud Architect & Full Stack Developer">
+    <title>Slancer | Cloud Architect</title>
+    
+    <!-- Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+                    colors: { bg: '#0f0f0f', surface: '#1a1a1a', primary: '#E0E0E0', secondary: '#A3A3A3', accent: '#FFFFFF', muted: '#737373' },
+                    backgroundImage: { 'silver-gradient': "linear-gradient(135deg, #E0E0E0 0%, #BDBDBD 100%)" }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Settings */
+        body { background-color: #0f0f0f; color: #D4D4D4; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #0f0f0f; }
+        ::-webkit-scrollbar-thumb { background: #404040; border-radius: 4px; border: 2px solid #0f0f0f; }
+        
+        .glass-panel { 
+            background: rgba(26, 26, 26, 0.4); 
+            backdrop-filter: blur(8px); 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-panel:hover { 
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.3); 
+            box-shadow: 0 10px 30px -10px rgba(255, 255, 255, 0.1);
+        }
+
+        .grid-bg { 
+            background-size: 40px 40px; 
+            background-image: linear-gradient(to right, #262626 1px, transparent 1px), linear-gradient(to bottom, #262626 1px, transparent 1px); 
+            opacity: 0.15; 
+        }
+
+        /* --- HERO ORBIT ANIMATION --- */
+        @keyframes orbit-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes orbit-counter-spin { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
+        
+        .orbit-container { width: 350px; height: 350px; position: relative; display: flex; justify-content: center; align-items: center; }
+        @media (max-width: 768px) { .orbit-container { width: 260px; height: 260px; margin: 2rem auto; } }
+
+        .orbit-ring { width: 100%; height: 100%; position: absolute; border: 1px dashed rgba(255,255,255,0.1); border-radius: 50%; animation: orbit-spin 20s linear infinite; }
+        .orbit-icon-wrapper { position: absolute; top: 50%; left: 50%; width: 50px; height: 50px; margin-top: -25px; margin-left: -25px; }
+        
+        @media (min-width: 769px) {
+            .pos-1 { transform: rotate(0deg) translate(175px) rotate(0deg); }
+            .pos-2 { transform: rotate(120deg) translate(175px) rotate(-120deg); }
+            .pos-3 { transform: rotate(240deg) translate(175px) rotate(-240deg); }
+        }
+        @media (max-width: 768px) {
+            .pos-1 { transform: rotate(0deg) translate(130px) rotate(0deg); }
+            .pos-2 { transform: rotate(120deg) translate(130px) rotate(-120deg); }
+            .pos-3 { transform: rotate(240deg) translate(130px) rotate(-240deg); }
+        }
+
+        .orbit-icon { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; color: white; font-size: 1.2rem; box-shadow: 0 0 15px rgba(255,255,255,0.05); animation: orbit-counter-spin 20s linear infinite; }
+        .slide { opacity: 0; visibility: hidden; transition: opacity 0.8s ease, visibility 0.8s; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+        .slide.active { opacity: 1; visibility: visible; z-index: 10; }
+
+        /* --- AUTOMATIC ALTERNATING LAYOUT FOR EXPERIENCE --- */
+        /* Mobile: Always Stacked */
+        .experience-item { flex-direction: column; }
+        .exp-content { text-align: left; padding-left: 3.5rem; width: 100%; }
+        .exp-image { justify-content: flex-start; padding-left: 3.5rem; width: 100%; margin-top: 1rem; }
+
+        /* Desktop: Auto Alternating (Zig Zag) */
+        @media (min-width: 768px) {
+            /* ODD Items (1, 3, 5...) -> Text Left, Image Right */
+            .experience-item:nth-child(odd) { flex-direction: row; }
+            .experience-item:nth-child(odd) .exp-content { text-align: right; padding-right: 3rem; padding-left: 0; width: 50%; }
+            .experience-item:nth-child(odd) .exp-image { justify-content: flex-start; padding-left: 0; width: 50%; }
+
+            /* EVEN Items (2, 4, 6...) -> Text Right, Image Left */
+            .experience-item:nth-child(even) { flex-direction: row-reverse; }
+            .experience-item:nth-child(even) .exp-content { text-align: left; padding-left: 3rem; padding-right: 0; width: 50%; }
+            .experience-item:nth-child(even) .exp-image { justify-content: flex-end; padding-left: 0; width: 50%; }
+        }
+
+        /* Resume Paper Style */
+        .a4-paper { background-color: white; color: #1f2937; width: 100%; max-width: 210mm; padding: 1.5rem; margin: 0 auto; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); font-family: 'Inter', sans-serif; }
+        @media (min-width: 768px) { .a4-paper { padding: 2.5rem; min-height: 297mm; } }
+
+        /* Hide scrollbar for carousel but keep functionality */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="antialiased relative">
+
+    <canvas id="bg-canvas" class="fixed inset-0 w-full h-full pointer-events-none z-0 opacity-50"></canvas>
+    <div class="fixed inset-0 w-full h-full grid-bg pointer-events-none z-0"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 border-b border-white/10 bg-bg/90 backdrop-blur-md transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <span class="font-mono text-xl font-bold text-primary tracking-widest border border-primary/30 px-2 py-1">SLANCER</span>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8 font-mono text-sm">
+                        <a href="#hero" class="text-secondary hover:text-white transition-colors">./Home</a>
+                        <a href="#about" class="text-secondary hover:text-white transition-colors">./About</a>
+                        <a href="#experience" class="text-secondary hover:text-white transition-colors">./Exp</a>
+                        <a href="#projects" class="text-secondary hover:text-white transition-colors">./Projects</a>
+                        <a href="#cv" class="text-secondary hover:text-white transition-colors">./CV</a>
+                        <a href="#blog" class="text-secondary hover:text-white transition-colors">./Blog</a>
+                        <a href="#contact" class="text-secondary hover:text-white transition-colors">./Contact</a>
+                        <!-- LOGIN BUTTON (No Navigation, White Background) -->
+                        <a href="#" onclick="return false;" class="px-5 py-2 rounded bg-white text-black font-bold hover:bg-gray-200 transition-all shadow-lg cursor-default">Login</a>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" onclick="toggleMobileMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-white/10 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Dropdown Menu -->
+        <div class="hidden md:hidden bg-[#0f0f0f] border-b border-white/10 absolute top-16 left-0 w-full z-50 shadow-2xl" id="mobile-menu">
+            <div class="px-4 pt-4 pb-6 space-y-2 font-mono text-sm">
+                <a href="#hero" class="block px-4 py-3 rounded-md hover:bg-white/5" onclick="toggleMobileMenu()">./Home</a>
+                <a href="#about" class="block px-4 py-3 rounded-md hover:bg-white/5" onclick="toggleMobileMenu()">./About</a>
+                <a href="#experience" class="block px-4 py-3 rounded-md hover:bg-white/5" onclick="toggleMobileMenu()">./Exp</a>
+                <a href="#projects" class="block px-4 py-3 rounded-md hover:bg-white/5" onclick="toggleMobileMenu()">./Projects</a>
+                <a href="#cv" class="block px-4 py-3 rounded-md hover:bg-white/5" onclick="toggleMobileMenu()">./CV</a>
+                <a href="#blog" class="block px-4 py-3 rounded-md hover:bg-white/5" onclick="toggleMobileMenu()">./Blog</a>
+                <a href="#contact" class="block px-4 py-3 rounded-md hover:bg-white/5" onclick="toggleMobileMenu()">./Contact</a>
+                <div class="pt-4 mt-2 border-t border-white/10">
+                    <a href="#" class="block w-full text-center px-4 py-3 rounded-md text-black font-bold bg-white" onclick="toggleMobileMenu()">Login</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 pt-16">
+
+        <!-- ============================================ -->
+        <!-- HERO SECTION (3 SLIDES) -->
+        <!-- ============================================ -->
+        <section id="hero" class="h-[90vh] min-h-[600px] relative overflow-hidden flex items-center justify-center">
+            <div class="w-full max-w-7xl mx-auto px-6 h-full relative">
+                
+                <!-- SLIDE 1: AWS -->
+                <div class="slide active" id="slide-0">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full pt-12 md:pt-0">
+                        <div class="space-y-6 text-center lg:text-left order-2 lg:order-1">
+                            <span class="inline-block px-3 py-1 rounded border border-orange-500/30 bg-orange-500/10 text-orange-400 text-xs font-mono">CLOUD ARCHITECTURE</span>
+                            <h1 class="text-5xl md:text-8xl font-bold text-white tracking-tight">AWS <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-200">Native</span></h1>
+                            <p class="text-lg md:text-xl text-gray-400 max-w-lg mx-auto lg:mx-0">Designing scalable, serverless infrastructures using S3, Lambda, and DynamoDB.</p>
+                            <a href="#projects" class="inline-block px-8 py-3 bg-silver-gradient text-black font-bold rounded shadow-lg hover:scale-105 transition-transform">View AWS Projects</a>
+                        </div>
+                        
+                        <!-- Orbit Animation (Order 1 on Mobile) -->
+                        <div class="flex justify-center items-center order-1 lg:order-2">
+                            <div class="orbit-container">
+                                <div class="absolute inset-0 flex justify-center items-center z-10">
+                                    <i class="fa-brands fa-aws text-8xl md:text-9xl text-orange-500 drop-shadow-[0_0_30px_rgba(249,115,22,0.3)]"></i>
+                                </div>
+                                <div class="orbit-ring">
+                                    <div class="orbit-icon-wrapper pos-1"><div class="orbit-icon" title="EC2"><i class="fa-solid fa-server"></i></div></div>
+                                    <div class="orbit-icon-wrapper pos-2"><div class="orbit-icon" title="DynamoDB"><i class="fa-solid fa-database"></i></div></div>
+                                    <div class="orbit-icon-wrapper pos-3"><div class="orbit-icon" title="S3/CloudFront"><i class="fa-solid fa-cloud"></i></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 2: WEB DEV -->
+                <div class="slide" id="slide-1">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full pt-12 md:pt-0">
+                        <div class="space-y-6 text-center lg:text-left order-2 lg:order-1">
+                            <span class="inline-block px-3 py-1 rounded border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-mono">FULL STACK</span>
+                            <h1 class="text-5xl md:text-8xl font-bold text-white tracking-tight">Web <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-200">Solutions</span></h1>
+                            <p class="text-lg md:text-xl text-gray-400 max-w-lg mx-auto lg:mx-0">Building responsive, high-performance web applications with React, Node.js, and Tailwind.</p>
+                            <a href="#projects" class="inline-block px-8 py-3 bg-silver-gradient text-black font-bold rounded shadow-lg hover:scale-105 transition-transform">View Web Projects</a>
+                        </div>
+                        
+                        <!-- Orbit Animation -->
+                        <div class="flex justify-center items-center order-1 lg:order-2">
+                            <div class="orbit-container">
+                                <div class="absolute inset-0 flex justify-center items-center z-10">
+                                    <i class="fa-brands fa-react text-8xl md:text-9xl text-blue-400 drop-shadow-[0_0_30px_rgba(96,165,250,0.3)]"></i>
+                                </div>
+                                <div class="orbit-ring">
+                                    <div class="orbit-icon-wrapper pos-1"><div class="orbit-icon" title="HTML5"><i class="fa-brands fa-html5"></i></div></div>
+                                    <div class="orbit-icon-wrapper pos-2"><div class="orbit-icon" title="CSS3"><i class="fa-brands fa-css3-alt"></i></div></div>
+                                    <div class="orbit-icon-wrapper pos-3"><div class="orbit-icon" title="Node.js"><i class="fa-brands fa-node"></i></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLIDE 3: GAME DEV -->
+                <div class="slide" id="slide-2">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center h-full pt-12 md:pt-0">
+                        <div class="space-y-6 text-center lg:text-left order-2 lg:order-1">
+                            <span class="inline-block px-3 py-1 rounded border border-pink-500/30 bg-pink-500/10 text-pink-400 text-xs font-mono">INTERACTIVE</span>
+                            <h1 class="text-5xl md:text-8xl font-bold text-white tracking-tight">Game <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-300">Design</span></h1>
+                            <p class="text-lg md:text-xl text-gray-400 max-w-lg mx-auto lg:mx-0">Creating immersive 2D experiences with Unity, C# scripting, and complex physics.</p>
+                            <a href="#projects" class="inline-block px-8 py-3 bg-silver-gradient text-black font-bold rounded shadow-lg hover:scale-105 transition-transform">View Game Projects</a>
+                        </div>
+                        
+                        <!-- Orbit Animation -->
+                        <div class="flex justify-center items-center order-1 lg:order-2">
+                            <div class="orbit-container">
+                                <div class="absolute inset-0 flex justify-center items-center z-10">
+                                    <i class="fa-brands fa-unity text-8xl md:text-9xl text-white drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]"></i>
+                                </div>
+                                <div class="orbit-ring">
+                                    <div class="orbit-icon-wrapper pos-1"><div class="orbit-icon" title="Gameplay"><i class="fa-solid fa-gamepad"></i></div></div>
+                                    <div class="orbit-icon-wrapper pos-2"><div class="orbit-icon" title="Characters"><i class="fa-solid fa-ghost"></i></div></div>
+                                    <div class="orbit-icon-wrapper pos-3"><div class="orbit-icon"><span class="font-bold text-xs">C#</span></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Slide Navigation Dots -->
+            <div class="absolute bottom-12 left-1/2 -translate-x-1/2 flex space-x-4 z-20">
+                <button onclick="setSlide(0)" class="w-3 h-3 rounded-full bg-white transition-all hover:scale-125"></button>
+                <button onclick="setSlide(1)" class="w-3 h-3 rounded-full bg-gray-600 transition-all hover:bg-white hover:scale-125"></button>
+                <button onclick="setSlide(2)" class="w-3 h-3 rounded-full bg-gray-600 transition-all hover:bg-white hover:scale-125"></button>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- ABOUT SECTION -->
+        <!-- ============================================ -->
+        <section id="about" class="py-24 relative bg-surface/30">
+            <div class="max-w-6xl mx-auto px-6">
+                <div class="mb-12 text-center">
+                    <h2 class="text-sm font-mono text-secondary mb-2">01. /ABOUT_ME</h2>
+                    <h3 class="text-3xl font-bold text-white">The Person Behind the Code</h3>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+                    <div class="md:col-span-4 flex justify-center">
+                        <div class="relative w-48 h-48 md:w-64 md:h-64">
+                            <div class="absolute inset-0 bg-silver-gradient rounded-full blur-xl opacity-20 animate-pulse"></div>
+                            <img src="https://placehold.co/400x400/1e293b/FFF?text=Saad+Waseem" alt="Saad Waseem" class="w-full h-full object-cover rounded-full border-4 border-white/10 relative z-10">
+                        </div>
+                    </div>
+                    <div class="md:col-span-8 space-y-8 text-center md:text-left">
+                        <div class="prose prose-invert">
+                            <h4 class="text-2xl font-bold text-white mb-4">Saad Waseem</h4>
+                            <p class="text-gray-400 text-lg leading-relaxed">
+                                Cloud Practitioner and Web Developer with hands-on experience in AWS services, full-stack web development, and game asset integration. Proven ability to build scalable web applications, implement CI/CD pipelines, and deploy solutions using S3, EC2, and Lambda. Currently delivering technical solutions for international clients.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- EXPERIENCE SECTION (Auto Alternating) -->
+        <!-- ============================================ -->
+        <section id="experience" class="py-24 relative">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="mb-16 text-center">
+                    <h2 class="text-sm font-mono text-secondary mb-2">02. /CAREER_LOG</h2>
+                    <h3 class="text-3xl font-bold text-white">Professional Journey</h3>
+                </div>
+
+                <div class="relative space-y-24">
+                    <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-px bg-white/10"></div>
+
+                    <!-- EXPERINCE ITEM 1 (Unity) -->
+                    <!-- Just Copy this block to add more! -->
+                    <div class="experience-item relative flex flex-col gap-8 items-center group">
+                        <div class="md:w-1/2 w-full pl-12 md:pl-0 exp-content">
+                            <h4 class="text-2xl font-bold text-white">Unity 2D Game Developer</h4>
+                            <p class="text-sm text-primary font-mono mb-3">Freelance | Sep 2025 - Dec 2025</p>
+                            <div class="bg-white/5 p-6 rounded-xl border border-white/5 mb-4 hover:bg-white/10 transition duration-300">
+                                <p class="text-gray-300 text-sm leading-relaxed mb-2"><strong class="text-white">What I did:</strong> Designed a 4-level 2D platformer with boss fights and recipe mechanics.</p>
+                                <p class="text-gray-400 text-sm leading-relaxed"><strong class="text-white">How:</strong> Utilized Unity physics and C# State Machines.</p>
+                            </div>
+                            <a href="experience-unity.html" class="inline-block px-6 py-2 border border-white/20 rounded-full text-white text-xs hover:bg-white hover:text-black transition-all font-bold">View Details</a>
+                        </div>
+                        <div class="absolute left-4 md:left-1/2 -translate-x-[9px] w-5 h-5 bg-black border-4 border-white rounded-full z-10 mt-2"></div>
+                        <div class="md:w-1/2 w-full pl-12 md:pl-0 flex exp-image opacity-80 group-hover:opacity-100 transition duration-500">
+                            <div class="w-full max-w-md aspect-video bg-gray-800 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+                                <img src="https://placehold.co/600x400/be185d/FFF?text=Game+Screenshot" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- EXPERINCE ITEM 2 (Church) -->
+                    <div class="experience-item relative flex flex-col gap-8 items-center group">
+                        <div class="md:w-1/2 w-full pl-12 md:pl-0 exp-content">
+                            <h4 class="text-2xl font-bold text-white">Church Website Developer</h4>
+                            <p class="text-sm text-primary font-mono mb-3">Freelance | Mar 2025 - Sep 2025</p>
+                            <div class="bg-white/5 p-6 rounded-xl border border-white/5 mb-4 hover:bg-white/10 transition duration-300">
+                                <p class="text-gray-300 text-sm leading-relaxed mb-2"><strong class="text-white">What I did:</strong> Built a digital hub for a local church with event scheduling.</p>
+                                <p class="text-gray-400 text-sm leading-relaxed"><strong class="text-white">How:</strong> React frontend, Node.js backend, Custom JSON CMS.</p>
+                            </div>
+                            <a href="experience-church.html" class="inline-block px-6 py-2 border border-white/20 rounded-full text-white text-xs hover:bg-white hover:text-black transition-all font-bold">View Details</a>
+                        </div>
+                        <div class="absolute left-4 md:left-1/2 -translate-x-[9px] w-5 h-5 bg-black border-4 border-white rounded-full z-10 mt-2"></div>
+                        <div class="md:w-1/2 w-full pl-12 md:pl-0 flex exp-image opacity-80 group-hover:opacity-100 transition duration-500">
+                            <div class="w-full max-w-md aspect-video bg-gray-800 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+                                <img src="https://placehold.co/600x400/1e293b/FFF?text=Website+Screenshot" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="experience-item relative flex flex-col gap-8 items-center group">
+    <div class="md:w-1/2 w-full pl-12 md:pl-0 exp-content">
+        <h4 class="text-2xl font-bold text-white">Web-Based Unreal Engine Game Integration</h4>
+        <p class="text-sm text-primary font-mono mb-3">Freelance | Jul 2025 - Aug 2025</p>
+        <div class="bg-white/5 p-6 rounded-xl border border-white/5 mb-4 hover:bg-white/10 transition duration-300">
+            <p class="text-gray-300 text-sm leading-relaxed mb-2">
+                <strong class="text-white">What I did:</strong> Developed a single-page website to host a <span class="text-red-400 font-bold">Minecraft-themed web-based Unreal Engine game</span>. Integrated the game via an <span class="text-red-400 font-bold">iframe</span> for seamless web launch.
+            </p>
+            <p class="text-gray-400 text-sm leading-relaxed">
+                <strong class="text-white">How:</strong> Built a lightweight, responsive HTML/CSS frontend to embed the game, ensuring cross-browser compatibility and smooth performance for web users. Completed the project within one week as a freelance assignment.
+            </p>
+        </div>
+        <a href="./Minecraft-Themed_exp.html" class="inline-block px-6 py-2 border border-white/20 rounded-full text-white text-xs hover:bg-white hover:text-black transition-all font-bold">View Details</a>
+    </div>
+    <div class="absolute left-4 md:left-1/2 -translate-x-[9px] w-5 h-5 bg-black border-4 border-white rounded-full z-10 mt-2"></div>
+    <div class="md:w-1/2 w-full pl-12 md:pl-0 flex exp-image opacity-80 group-hover:opacity-100 transition duration-500">
+        <div class="w-full max-w-md aspect-video bg-gray-800 rounded-xl overflow-hidden border border-white/10 shadow-2xl">
+            <img src="https://placehold.co/600x400/1e40af/FFF?text=Minecraft+Web+Game" class="w-full h-full object-cover">
+        </div>
+    </div>
+</div>
+
+
+
+
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- PROJECTS SECTION (Horizontal Carousel) -->
+        <!-- ============================================ -->
+        <section id="projects" class="py-24 relative bg-bg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-end mb-12">
+                    <div>
+                        <h2 class="text-sm font-mono text-secondary mb-2">03. /PROJECTS</h2>
+                        <h3 class="text-3xl font-bold text-white">Featured Deployments</h3>
+                    </div>
+                    <!-- Navigation Arrows -->
+                    <div class="flex gap-2">
+                        <button onclick="scrollProjects(-1)" class="w-10 h-10 rounded-full border border-white/10 text-white hover:bg-white hover:text-black transition flex items-center justify-center"><i class="fa-solid fa-arrow-left"></i></button>
+                        <button onclick="scrollProjects(1)" class="w-10 h-10 rounded-full border border-white/10 text-white hover:bg-white hover:text-black transition flex items-center justify-center"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Carousel Container -->
+                <div id="projects-container" class="flex gap-8 overflow-x-auto hide-scrollbar pb-8 snap-x snap-mandatory" style="scroll-behavior: smooth;">
+                    
+                    <!-- PROJECT 1 -->
+                    <a href="project-serverless-portfolio.html" class="glass-panel rounded-2xl overflow-hidden flex flex-col group cursor-pointer min-w-[320px] md:min-w-[400px] snap-center">
+                        <div class="h-48 bg-gray-800 relative overflow-hidden shrink-0">
+                            <img src="https://placehold.co/600x400/9a3412/FFF?text=AWS+S3" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute top-4 right-4 bg-black/60 backdrop-blur px-3 py-1 rounded text-xs font-mono text-white border border-white/20">AWS S3</div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">Serverless Portfolio</h4>
+                            <p class="text-sm text-gray-400 mb-4 flex-1 leading-relaxed">
+                                A highly available static site hosted on S3, accelerated by CloudFront, and automated via GitHub Actions CI/CD.
+                            </p>
+                            <span class="mt-auto text-xs font-bold text-white uppercase tracking-widest border-b border-transparent group-hover:border-white w-max transition-all">View Case Study &rarr;</span>
+                        </div>
+                    </a>
+
+                    <!-- PROJECT 2 -->
+                    <a href="project-ec2-static-host.html" class="glass-panel rounded-2xl overflow-hidden flex flex-col group cursor-pointer min-w-[320px] md:min-w-[400px] snap-center">
+                        <div class="h-48 bg-gray-800 relative overflow-hidden shrink-0">
+                            <img src="https://placehold.co/600x400/064e3b/FFF?text=EC2" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute top-4 right-4 bg-black/60 px-3 py-1 rounded text-xs font-mono text-white border border-white/20">Linux</div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">EC2 Static Host</h4>
+                            <p class="text-sm text-gray-400 mb-4 flex-1 leading-relaxed">
+                                Manual configuration of an Amazon Linux server with security groups, SSH access, and cron-based auto-updates.
+                            </p>
+                            <span class="mt-auto text-xs font-bold text-white uppercase tracking-widest border-b border-transparent group-hover:border-white w-max transition-all">View Case Study &rarr;</span>
+                        </div>
+                    </a>
+
+                    <!-- PROJECT 3 -->
+                    <a href="project-chef-adventure.html" class="glass-panel rounded-2xl overflow-hidden flex flex-col group cursor-pointer min-w-[320px] md:min-w-[400px] snap-center">
+                        <div class="h-48 bg-gray-800 relative overflow-hidden shrink-0">
+                            <img src="https://placehold.co/600x400/be185d/FFF?text=Unity" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute top-4 right-4 bg-black/60 px-3 py-1 rounded text-xs font-mono text-white border border-white/20">Game Dev</div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">Full Stack E-commerce Website</h4>
+                            <p class="text-sm text-gray-400 mb-4 flex-1 leading-relaxed">
+                               Developed and hosted on AWS.
+                            </p>
+                            <span class="mt-auto text-xs font-bold text-white uppercase tracking-widest border-b border-transparent group-hover:border-white w-max transition-all">View Case Study &rarr;</span>
+                        </div>
+                    </a>
+
+                    <!-- PROJECT 4 (Fake, for testing scroll) -->
+                    <a href="project-test-scroll.html" class="glass-panel rounded-2xl overflow-hidden flex flex-col group cursor-pointer min-w-[320px] md:min-w-[400px] snap-center">
+                        <div class="h-48 bg-gray-800 relative overflow-hidden shrink-0">
+                            <img src="https://placehold.co/600x400/ff00ff/FFF?text=Fake+Project" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute top-4 right-4 bg-black/60 px-3 py-1 rounded text-xs font-mono text-white border border-white/20">TEST</div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h4 class="text-xl font-bold text-white mb-2 group-hover:text-primary transition-colors">Test Project Scroll</h4>
+                            <p class="text-sm text-gray-400 mb-4 flex-1 leading-relaxed">
+                                This is a fake project to demonstrate horizontal scrolling. It should appear to the right of the other projects.
+                            </p>
+                            <span class="mt-auto text-xs font-bold text-white uppercase tracking-widest border-b border-transparent group-hover:border-white w-max transition-all">View Case Study &rarr;</span>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ============================================ -->
+        <!-- BLOG SECTION (Wrapping Grid) -->
+        <!-- ============================================
+        <section id="blog" class="py-24 bg-surface/30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-sm font-mono text-secondary mb-2">04. /INSIGHTS</h2>
+                <h3 class="text-3xl font-bold text-white mb-12">Technical Logs</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8
+                    <!-- BLOG 1 --
+                    <a href="blog-debugging-cloudfront.html" class="glass-panel p-6 rounded-xl flex flex-col h-full group hover:border-white/30 cursor-pointer">
+                        <span class="text-xs font-mono text-gray-400 mb-2 border-b border-white/10 pb-2 w-max">CLOUD</span>
+                        <h4 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors">Debugging CloudFront SSL</h4>
+                        <p class="text-sm text-muted flex-1 mb-4">How I resolved certificate validation issues by switching DNS to Route 53.</p>
+                        <span class="text-xs text-white underline decoration-white/30 group-hover:decoration-white transition-all">Read Article</span>
+                    </a>
+
+                    <!-- BLOG 2 --
+                    <a href="blog-automating-ec2.html" class="glass-panel p-6 rounded-xl flex flex-col h-full group hover:border-white/30 cursor-pointer">
+                        <span class="text-xs font-mono text-gray-400 mb-2 border-b border-white/10 pb-2 w-max">DEVOPS</span>
+                        <h4 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors">Automating EC2 Updates</h4>
+                        <p class="text-sm text-muted flex-1 mb-4">Setting up cron jobs for auto-updates and managing permissions via Bash.</p>
+                        <span class="text-xs text-white underline decoration-white/30 group-hover:decoration-white transition-all">Read Article</span>
+                    </a>
+                    
+                    <!-- BLOG 3 --
+                     <a href="blog-optimizing-react.html" class="glass-panel p-6 rounded-xl flex flex-col h-full group hover:border-white/30 cursor-pointer">
+                        <span class="text-xs font-mono text-gray-400 mb-2 border-b border-white/10 pb-2 w-max">WEB</span>
+                        <h4 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors">Optimizing React Builds</h4>
+                        <p class="text-sm text-muted flex-1 mb-4">Reducing bundle size and improving load times with code splitting.</p>
+                        <span class="text-xs text-white underline decoration-white/30 group-hover:decoration-white transition-all">Read Article</span>
+                    </a>
+
+                    <!-- BLOG 4 (Fake, for testing wrap) -
+                    <a href="blog-fake-log.html" class="glass-panel p-6 rounded-xl flex flex-col h-full group hover:border-white/30 cursor-pointer">
+                        <span class="text-xs font-mono text-gray-400 mb-2 border-b border-white/10 pb-2 w-max">TEST</span>
+                        <h4 class="text-lg font-bold text-white mb-2 group-hover:text-primary transition-colors">Fake Technical Log</h4>
+                        <p class="text-sm text-muted flex-1 mb-4">This fake log tests the grid wrapping functionality. It should appear on the next row if the screen allows.</p>
+                        <span class="text-xs text-white underline decoration-white/30 group-hover:decoration-white transition-all">Read Article</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+       -->
+        <!-- CV SECTION (Live Preview) -->
+        <!-- ============================================ -->
+        <section id="cv" class="py-24 border-y border-white/5 bg-[#1a1a1a]">
+            <div class="max-w-5xl mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold text-white mb-6">Resume</h2>
+                <button onclick="window.print()" class="mb-10 px-6 py-2 bg-white text-black font-bold rounded hover:bg-gray-200 transition">Download PDF</button>
+                
+                <!-- A4 Paper Resume -->
+                <div class="a4-paper text-left text-sm leading-relaxed">
+                    <!-- Header -->
+                    <div class="border-b-2 border-gray-800 pb-4 mb-6">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-baseline">
+                            <div>
+                                <h1 class="text-2xl md:text-3xl font-bold uppercase tracking-wide">Saad Waseem</h1>
+                                <p class="text-gray-600 font-medium">Lahore, Pakistan</p>
+                            </div>
+                            <div class="mt-2 md:mt-0 text-gray-600 flex flex-wrap gap-4 text-xs font-medium">
+                                <span>obsks23@gmail.com</span>
+                                <span>+92 349 0436643</span>
+                                <span>LinkedIn</span>
+                                <span>GitHub</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary -->
+                    <div class="mb-6">
+                        <h3 class="text-base font-bold uppercase border-b border-gray-300 mb-2 pb-1">Professional Summary</h3>
+                        <p>Cloud Practitioner and Web Developer with hands-on experience in AWS services, full-stack web development, and game asset integration. Proven ability to build scalable web applications, implement CI/CD pipelines, and deploy solutions using S3, EC2, and Lambda. Currently delivering technical solutions for international clients while expanding expertise in serverless architectures and modern web technologies.</p>
+                    </div>
+
+                    <!-- Skills -->
+                    <div class="mb-6">
+                        <h3 class="text-base font-bold uppercase border-b border-gray-300 mb-2 pb-1">Technical Skills</h3>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li><strong>Cloud & DevOps:</strong> AWS (S3, EC2, Lambda, DynamoDB, CloudFront, Route 53, IAM), CI/CD Pipelines (GitHub Actions), Serverless Architecture.</li>
+                            <li><strong>Web Development:</strong> React.js, Node.js, HTML5, CSS3, JavaScript, REST APIs.</li>
+                            <li><strong>Game Development:</strong> Unity 2D, C# Scripting, Level Design, AI Integration, UX/UI Design.</li>
+                            <li><strong>Tools:</strong> Git/GitHub, Linux, Docker, Command-line tools.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Experience -->
+                    <div class="mb-6">
+                        <h3 class="text-base font-bold uppercase border-b border-gray-300 mb-2 pb-1">Professional Experience</h3>
+                        
+                        <div class="mb-4">
+                            <div class="flex justify-between font-bold">
+                                <span>Unity 2D Game Developer</span>
+                                <span class="text-xs font-normal">Sep 2025 - Dec 2025</span>
+                            </div>
+                            <p class="text-xs italic mb-1">Freelance</p>
+                            <p>Designed and developed a 2D chef-themed game for a Portuguese client featuring four levels, two boss fights, and collectible recipes to unlock new stages. Focused on UX design, level setup, and scene integration.</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <div class="flex justify-between font-bold">
+                                <span>Church Website (CCC Miracle Parish)</span>
+                                <span class="text-xs font-normal">Mar 2025 - Sep 2025</span>
+                            </div>
+                            <p class="text-xs italic mb-1">Freelance</p>
+                            <p>Full-stack development of a local church website including responsive design, interactive pages, and content management features for events and announcements. Technologies: HTML/CSS/JS, React, Node.js, Vercel Hosting.</p>
+                        </div>
+                    </div>
+
+                    <!-- Projects -->
+                    <div class="mb-6">
+                        <h3 class="text-base font-bold uppercase border-b border-gray-300 mb-2 pb-1">Projects</h3>
+                        <ul class="list-disc pl-5 space-y-2">
+                            <li><strong>Portfolio on AWS S3 with CI/CD Pipeline:</strong> Developed a personal portfolio hosted on AWS S3 with a custom domain. Configured a GitHub Actions CI/CD pipeline to automate deployment whenever new changes are pushed.</li>
+                            <li><strong>Game Website:</strong> Developed an interactive, animated website for a game project, showcasing animations, gameplay highlights, and live updates. Connected with Unity Web Game using iframe.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Education -->
+                    <div>
+                        <h3 class="text-base font-bold uppercase border-b border-gray-300 mb-2 pb-1">Education</h3>
+                        <div class="flex justify-between font-bold">
+                            <span>Bachelor of Science in Computer Science</span>
+                            <span class="text-xs font-normal">2023 - 2027</span>
+                        </div>
+                        <p class="text-xs">University of South Asia, Lahore, Pakistan</p>
+                    </div>
+
+                    <!-- Certifications -->
+                    <div>
+                        <h3 class="text-base font-bold uppercase border-b border-gray-300 mb-2 pb-1">Certifications</h3>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>AWS Certified Solutions Architecture (in progress/planned)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="py-12 bg-black text-center border-t border-white/10">
+            <div class="max-w-3xl mx-auto px-4">
+                <h2 class="text-2xl font-bold text-white mb-6">Let's Build Together</h2>
+                <div class="flex justify-center gap-6 mb-8">
+                    <a href="https://linkedin.com/in/saadwaseem" class="px-6 py-3 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition flex items-center gap-2">
+                        <i class="fa-brands fa-linkedin"></i> Connect on LinkedIn
+                    </a>
+                    <a href="https://github.com/SaadWaseem" class="px-6 py-3 border border-white/20 text-white font-bold rounded-full hover:bg-white/10 transition flex items-center gap-2">
+                        <i class="fa-brands fa-github"></i> View on GitHub
+                    </a>
+                </div>
+                <p class="text-gray-600 text-sm">© 2025 Saad Waseem. All rights reserved.</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Interactive Animation Scripts -->
+    <script>
+        // --- 1. MOBILE MENU LOGIC ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // --- 2. SLIDESHOW LOGIC ---
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.bottom-12 button');
+
+        function setSlide(index) {
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => { d.classList.remove('bg-white'); d.classList.add('bg-gray-600'); });
+            
+            slides[index].classList.add('active');
+            dots[index].classList.remove('bg-gray-600');
+            dots[index].classList.add('bg-white');
+            currentSlide = index;
+        }
+
+        setInterval(() => {
+            let next = (currentSlide + 1) % slides.length;
+            setSlide(next);
+        }, 5000);
+
+        // --- 3. PROJECT SCROLL LOGIC ---
+        function scrollProjects(direction) {
+            const container = document.getElementById('projects-container');
+            const scrollAmount = 400;
+            if(direction === 1) {
+                container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            } else {
+                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            }
+        }
+
+        // --- 4. CONSTELLATION MOUSE EFFECT ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let particles = [];
+        let mouse = { x: null, y: null, radius: 150 };
+
+        window.addEventListener('mousemove', e => { mouse.x = e.x; mouse.y = e.y; });
+        window.addEventListener('resize', resize);
+        function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; }
+        resize();
+
+        class Particle {
+            constructor() { 
+                this.x = Math.random() * width; this.y = Math.random() * height; 
+                this.vx = (Math.random() - 0.5) * 0.5; this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2;
+            }
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                if(this.x < 0) this.x = width; if(this.x > width) this.x = 0;
+                if(this.y < 0) this.y = height; if(this.y > height) this.y = 0;
+                
+                if (mouse.x != null) {
+                    let dx = mouse.x - this.x, dy = mouse.y - this.y;
+                    let distance = Math.sqrt(dx*dx + dy*dy);
+                    if (distance < mouse.radius) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(224, 224, 224, ${0.2 - distance/mouse.radius})`;
+                        ctx.moveTo(this.x, this.y);
+                        ctx.lineTo(mouse.x, mouse.y);
+                        ctx.stroke();
+                        const force = (mouse.radius - distance) / mouse.radius;
+                        const dxNorm = dx / distance, dyNorm = dy / distance;
+                        this.x -= dxNorm * force * 1;
+                        this.y -= dyNorm * force * 1;
+                    }
+                }
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(224, 224, 224, 0.3)';
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill();
+            }
+        }
+        for(let i=0; i<70; i++) particles.push(new Particle());
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            particles.forEach(p => { p.update(); p.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
