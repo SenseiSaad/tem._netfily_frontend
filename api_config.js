@@ -1,7 +1,7 @@
 // Global API Configuration
 // IMPORTANT STEP: Once you deploy to Render, replace this with your actual Render URL!
 // e.g. const API_BASE_URL = 'https://portfolio-backend-1234.onrender.com';
-const API_BASE_URL = 'http://127.0.0.1:8000'; 
+const API_BASE_URL = 'https://temp-renderbackend.onrender.com'; 
 
 document.addEventListener('DOMContentLoaded', () => {
     const desktopAdminLink = document.getElementById('desktop-admin-login');
